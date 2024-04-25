@@ -6,6 +6,11 @@ import (
 	"net/http"
 )
 
+type Post struct {
+	Title   string
+	Content string
+}
+
 func IndexHandler(w http.ResponseWriter, r *http.Request) {
 	// Define the data to be passed into the template
 	data := struct {

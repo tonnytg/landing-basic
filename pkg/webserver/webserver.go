@@ -4,12 +4,15 @@ import (
 	"html/template"
 	"log"
 	"net/http"
+	"path/filepath"
 )
 
 type Post struct {
 	Title   string
 	Content string
 }
+
+var templatesDir = "pkg/webserver/templates/"
 
 func IndexHandler(w http.ResponseWriter, r *http.Request) {
 	// Define the data to be passed into the template
@@ -22,16 +25,39 @@ func IndexHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// Parse the template file
-	tmpl, err := template.ParseFiles("pkg/webserver/templates/index.html")
+	// tmpl := template.Must(template.ParseFiles("pkg/webserver/templates/main.html"))
+	// tmpl, err := template.ParseFiles("pkg/webserver/templates/index.html")
+	// if err != nil {
+	// 	http.Error(w, err.Error(), http.StatusInternalServerError)
+	// 	return
+	// }
+
+	// Obtém todos os arquivos .html no diretório de templates
+	files, err := filepath.Glob(filepath.Join(templatesDir, "*.html"))
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
 
+	// Parse os templates
+	tmpl := template.Must(template.ParseFiles(files...))
+
 	// Execute the template with the data and write the result to the response writer
-	if err := tmpl.Execute(w, data); err != nil {
+	// if err := tmpl.Execute(w, data); err != nil {
+	// 	http.Error(w, err.Error(), http.StatusInternalServerError)
+	// }
+
+	// err := tmpl.Execute(w, data)
+	// if err != nil {
+	// 	http.Error(w, err.Error(), http.StatusInternalServerError)
+	// 	return
+	// }
+	err = tmpl.ExecuteTemplate(w, "main.html", data)
+	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
 	}
+
 }
 
 func PostHandler(w http.ResponseWriter, r *http.Request) {

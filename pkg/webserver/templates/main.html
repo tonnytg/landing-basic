@@ -1,13 +1,25 @@
+{{ define "header" }}
+    {{ template "header.html" }}
+{{ end }}
+
+{{ define "footer" }}
+    {{ template "footer.html" }}
+{{ end }}
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Main Content</title>
+    <title>{{ .Title }}</title>
 </head>
 <body>
+    {{ template "header" }}
+    
     <main>
-        <!-- Main content goes here -->
+        <!-- Conteúdo da página vai aqui -->
     </main>
+
+    {{ template "footer" }}
 </body>
 </html>
